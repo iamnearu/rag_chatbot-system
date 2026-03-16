@@ -1,0 +1,48 @@
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/*.pyo
+**/.pytest_cache/
+**/*.egg-info/
+**/dist/
+**/build/
+**/.eggs/
+
+# Virtual environments
+**/venv/
+**/.venv/
+**/env/
+
+# Environment files
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Node / Frontend
+**/node_modules/
+**/dist/
+**/.next/
+**/.nuxt/
+
+# Logs
+**/*.log
+**/logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Data / Models
+**/rag_workspace/
+**/models_cache/
+**/data/uploads/
+
+# Misc
+a.py
+a.txt
+*.docx

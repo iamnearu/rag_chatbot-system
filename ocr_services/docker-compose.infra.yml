@@ -1,0 +1,63 @@
+  # docker-compose.infra.yml
+  # version: '3.8'
+#
+  services:
+    db:
+      image: postgres:15
+      container_name: ocr-postgres
+      environment:
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        POSTGRES_DB: ${POSTGRES_DB}
+      ports:
+        - "5432:5432"
+      volumes:
+        - ocr_postgres_data:/var/lib/postgresql/data
+      networks:
+        - ocr-network
+      restart: always
+
+    rabbitmq:
+      image: rabbitmq:3-management
+      container_name: ocr-rabbit
+      ports:
+        - "5672:5672"
+        - "15672:15672"
+      networks:
+        - ocr-network
+      restart: always
+#
+    redis:
+      image: redis:alpine
+      container_name: ocr-redis
+      command: redis-server --requirepass ${REDIS_PASSWORD}
+      ports:
+        - "6379:6379"
+      networks:
+        - ocr-network
+      restart: always
+
+    minio:
+      image: minio/minio
+      container_name: ocr-minio
+      ports:
+        - "9000:9000"
+        - "9001:9001"
+      environment:
+        MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+        MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      volumes:
+        - ocr_minio_data:/data
+      command: server /data --console-address ":9001"
+      networks:
+        - ocr-network
+      restart: always
+
+  networks:
+    ocr-network:
+      name: ocr-network
+      driver: bridge
+
+  volumes:
+    ocr_postgres_data:
+    ocr_minio_data:

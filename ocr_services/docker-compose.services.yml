@@ -1,0 +1,77 @@
+# docker-compose.services.yml
+# version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: ocr-api
+    command: uvicorn app.main:app --host ${API_HOST} --port ${API_PORT}
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    environment:
+      # Database
+      - DATABASE_URL=${DATABASE_URL}
+      # Message Queue
+      - RABBIT_URL=${RABBIT_URL}
+      # Cache
+      - REDIS_URL=${REDIS_URL}
+      # Object Storage
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
+      # Model
+      - MODEL_PATH=${MODEL_PATH}
+    volumes:
+      - .:/app
+      # Mount model từ host vào container
+      - /home/cuongnh/PycharmProjects/TTTS_01/DeepSeek-OCRR:${MODEL_PATH}
+    networks:
+      - ocr-network
+    env_file:
+      - .env
+    restart: always
+
+  worker:
+    build: .
+    container_name: ocr-worker
+    command: celery -A app.core.celery_app worker --loglevel=info -P solo --concurrency=1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    environment:
+      # Database
+      - DATABASE_URL=${DATABASE_URL}
+      # Message Queue
+      - RABBIT_URL=${RABBIT_URL}
+      # Cache
+      - REDIS_URL=${REDIS_URL}
+      # GPU Configuration
+      - PYTORCH_CUDA_ALLOC_CONF=${PYTORCH_CUDA_ALLOC_CONF}
+      # Object Storage
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET_NAME=${MINIO_BUCKET_NAME}
+      # Model
+      - MODEL_PATH=${MODEL_PATH}
+      - TRITON_PTXAS_PATH=${TRITON_PTXAS_PATH}
+    volumes:
+      - .:/app
+      # Mount model từ host vào container
+      - /home/cuongnh/PycharmProjects/TTTS_01/DeepSeek-OCRR:${MODEL_PATH}
+    networks:
+      - ocr-network
+    env_file:
+      - .env
+    restart: always
+
+networks:
+  ocr-network:
+    external: true
+    name: ocr-network
+    #

@@ -1,0 +1,128 @@
+# =========================
+
+# Environment variables
+
+# =========================
+
+
+.env.local
+.env.*.local
+
+# =========================
+
+# Python cache / bytecode
+
+# =========================
+
+**pycache**/
+**/**pycache**/
+*.py[cod]
+*$py.class
+
+# =========================
+
+# Virtual env
+
+# =========================
+
+.venv/
+venv/
+env/
+ENV/
+
+# =========================
+
+# Jupyter / IPython
+
+# =========================
+
+.ipynb_checkpoints/
+.profile_default/
+
+# =========================
+
+# Build / dist
+
+# =========================
+
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# =========================
+
+# Logs / temp
+
+# =========================
+
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# =========================
+
+# IDEs
+
+# =========================
+
+.vscode/
+.idea/
+*.swp
+
+# =========================
+
+# Your project specific (ignore whole folders)
+
+# =========================
+
+data/
+res/
+outputs/
+uploads/
+wheels/
+
+# nếu bạn cũng muốn bỏ luôn output xử lý thì mở comment dòng dưới:
+
+# process/
+
+# =========================
+
+# Secrets / local configs (tuỳ bạn)
+
+# =========================
+
+
+*.key
+*.pem
+
+
+corpus_manifest_single_gt.csv
+corpus_manifest.csv
+
+
+
+runapi.sh
+runwoker.sh
+
+# Python bytecode
+**/__pycache__/
+*.pyc
+
+# Heavy wheels & libraries
+wheels/
+*.whl
+
+# OCR Outputs & Images
+outputs/
+uploads/
+*.jpg
+*.png
+*.json
+*.md
+
+# Environments
+venv/
+.venv/
